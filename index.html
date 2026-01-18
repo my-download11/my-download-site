@@ -1,0 +1,262 @@
+<script>
+// 修复sessionStorage错误的简单代码
+try {
+  // 测试sessionStorage是否可用
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.setItem('test', 'test');
+    sessionStorage.removeItem('test');
+  }
+} catch(e) {
+  // 如果出错，创建一个假的sessionStorage
+  window.sessionStorage = {
+    setItem: function() {},
+    getItem: function() { return null; },
+    removeItem: function() {},
+    clear: function() {},
+    length: 0
+  };
+}
+</script>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇妙垃圾佬的下载中心 | download.free.rensen.uno</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .download-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: #667eea;
+        }
+        
+        .file-list {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .file-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .file-item:hover {
+            background: #eef2ff;
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .file-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+        
+        .file-details h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+        
+        .file-details p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .file-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .file-info {
+                flex-direction: column;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 奇妙垃圾佬资源下载中心</h1>
+            <p>可能会有一点小bug，请大家谅解</p>
+        </div>
+        
+        <div class="content">
+            <div class="download-section">
+                <h2 class="section-title">📜 所有文件下载</h2>
+                <div class="file-list">
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">📄</div>
+                            <div class="file-details">
+                                <h3>win10OOBE PPT.pptx</h3>
+                                <p>大小: 77 KB | 用PPT显示出了win10的OOBE</p>
+                            </div>
+                        </div>
+                        <a href="win10OOBE PPT.pptx" class="download-btn" download>立即下载</a>
+                    </div>
+
+<div class="file-item">
+    <div class="file-info">
+        <div class="file-icon">💿</div>
+        <div class="file-details">
+            <h3>Ding PE.iso 完整版</h3>
+            <p>大小: 681 MB | 自制Windows PE 系统镜像</p>
+            <div class="storage-tag">
+                <span class="tag">123云盘</span>
+                <span class="tag">国内高速</span>
+            </div>
+        </div>
+    </div>
+    <a href="https://www.123865.com/s/j4gCvd-WvTz" 
+       class="download-btn external-btn"
+       target="_blank">
+        <span class="btn-icon">☁️</span>
+        前往123云盘下载
+    </a>
+</div>
+        
+        <div class="footer">
+            <p>© 2026 我的下载中心 | 域名: <span id="domain-name">loading...</span></p>
+            <p>所有资源仅供学习交流使用 | <a href="mailto:your-email@example.com">联系站长</a></p>
+        </div>
+    </div>
+
+    <script>
+        // 自动显示当前域名
+        document.getElementById('domain-name').textContent = window.location.hostname;
+        
+        // 添加下载统计（简单版）
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const fileName = this.getAttribute('href');
+                console.log(`文件开始下载: ${fileName}`);
+                // 这里可以添加统计代码
+            });
+        });
+    </script>
+</body>
+</html>
