@@ -1,28 +1,9 @@
-<script>
-// 修复sessionStorage错误的简单代码
-try {
-  // 测试sessionStorage是否可用
-  if (typeof sessionStorage !== 'undefined') {
-    sessionStorage.setItem('test', 'test');
-    sessionStorage.removeItem('test');
-  }
-} catch(e) {
-  // 如果出错，创建一个假的sessionStorage
-  window.sessionStorage = {
-    setItem: function() {},
-    getItem: function() { return null; },
-    removeItem: function() {},
-    clear: function() {},
-    length: 0
-  };
-}
-</script>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>奇妙垃圾佬的下载中心 | download.free.rensen.uno</title>
+    <title>@爱玩批处理的cmd 的下载中心</title>
     <style>
         * {
             margin: 0;
@@ -32,7 +13,7 @@ try {
         }
         
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f0f2f5;
             min-height: 100vh;
             padding: 20px;
             display: flex;
@@ -43,14 +24,14 @@ try {
         .container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 800px;
             overflow: hidden;
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2c3e50;
             color: white;
             padding: 40px;
             text-align: center;
@@ -79,14 +60,14 @@ try {
             font-size: 1.8em;
             margin-bottom: 25px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #2c3e50;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
         .section-title i {
-            color: #667eea;
+            color: #2c3e50;
         }
         
         .file-list {
@@ -106,10 +87,10 @@ try {
         }
         
         .file-item:hover {
-            background: #eef2ff;
-            border-color: #667eea;
+            background: #e9ecef;
+            border-color: #2c3e50;
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 10px 20px rgba(44,62,80,0.1);
         }
         
         .file-info {
@@ -121,7 +102,7 @@ try {
         .file-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #2c3e50;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -142,7 +123,7 @@ try {
         }
         
         .download-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #2c3e50;
             color: white;
             border: none;
             padding: 10px 25px;
@@ -155,8 +136,17 @@ try {
         }
         
         .download-btn:hover {
+            background: #1e2b37;
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(44,62,80,0.3);
+        }
+        
+        .external-btn {
+            background: #e67e22;
+        }
+        
+        .external-btn:hover {
+            background: #d35400;
         }
         
         .footer {
@@ -164,11 +154,11 @@ try {
             padding: 25px;
             background: #f8f9fa;
             color: #666;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #dee2e6;
         }
         
         .footer a {
-            color: #667eea;
+            color: #2c3e50;
             text-decoration: none;
         }
         
@@ -200,8 +190,8 @@ try {
 <body>
     <div class="container">
         <div class="header">
-            <h1>📦 奇妙垃圾佬资源下载中心</h1>
-            <p>可能会有一点小bug，请大家谅解</p>
+            <h1>📦 @爱玩批处理的cmd 的下载中心</h1>
+            <p>一个简单的网站，欢迎访问</p>
         </div>
         
         <div class="content">
@@ -213,48 +203,72 @@ try {
                             <div class="file-icon">📄</div>
                             <div class="file-details">
                                 <h3>win10OOBE PPT.pptx</h3>
-                                <p>大小: 77 KB | 用PPT显示出了win10的OOBE</p>
+                                <p>大小: 77 KB | 用PPT显示win10的OOBE</p>
                             </div>
                         </div>
                         <a href="win10OOBE PPT.pptx" class="download-btn" download>立即下载</a>
                     </div>
 
-<div class="file-item">
-    <div class="file-info">
-        <div class="file-icon">💿</div>
-        <div class="file-details">
-            <h3>Ding PE.iso 完整版</h3>
-            <p>大小: 681 MB | 自制Windows PE 系统镜像</p>
-            <div class="storage-tag">
-                <span class="tag">123云盘</span>
-                <span class="tag">国内高速</span>
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">💿</div>
+                            <div class="file-details">
+                                <h3>Ding PE.iso 完整版</h3>
+                                <p>大小: 681 MB | 自制Windows PE 系统镜像</p>
+                            </div>
+                        </div>
+                        <a href="https://www.123865.com/s/j4gCvd-WvTz" 
+                           class="download-btn external-btn"
+                           target="_blank">
+                            ☁️ 前往123云盘下载
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <a href="https://www.123865.com/s/j4gCvd-WvTz" 
-       class="download-btn external-btn"
-       target="_blank">
-        <span class="btn-icon">☁️</span>
-        前往123云盘下载
+
+<div style="display: flex; gap: 20px; justify-content: center; align-items: center; margin: 40px 0;">
+    
+    <a href="jsq.html" 
+       style="color: #2c3e50; 
+              text-decoration: none; 
+              font-size: 1.0em; 
+              font-weight: bold;
+              padding: 10px 20px;
+              border: 2px solid #2c3e50;
+              border-radius: 50px;
+              transition: all 0.3s ease;">
+        打开作者自制计算器
     </a>
+    
+    <button onclick="window.open('https://space.bilibili.com/3546962242570935', '_blank')" 
+            style="background: #2c3e50; 
+                   color: white; 
+                   border: none; 
+                   padding: 12px 30px; 
+                   border-radius: 50px; 
+                   font-size: 1.0em; 
+                   font-weight: bold; 
+                   cursor: pointer;
+                   transition: all 0.3s ease;
+                   box-shadow: 0 5px 15px rgba(44,62,80,0.3);">
+        打开作者的B站主页
+    </button>
+    
 </div>
         
         <div class="footer">
-            <p>© 2026 我的下载中心 | 域名: <span id="domain-name">loading...</span></p>
-            <p>所有资源仅供学习交流使用 | <a href="mailto:your-email@example.com">联系站长</a></p>
+            <p>本站网址: https://my-download11.github.io/my-download-site/
+            <p>© 2026 @爱玩批处理的cmd 的下载中心 | 所有资源仅供学习交流使用</p>
         </div>
     </div>
 
     <script>
-        // 自动显示当前域名
-        document.getElementById('domain-name').textContent = window.location.hostname;
         
-        // 添加下载统计（简单版）
         document.querySelectorAll('.download-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                const fileName = this.getAttribute('href');
+                const fileName = this.getAttribute('href') || '外链';
                 console.log(`文件开始下载: ${fileName}`);
-                // 这里可以添加统计代码
             });
         });
     </script>
