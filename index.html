@@ -230,6 +230,7 @@
             <a href="#downloads">下载</a>
             <a href="#about">关于</a>
         </div>
+        
 
         <div class="feature-card">
             <div class="feature-content">
@@ -285,6 +286,25 @@
         <div class="footer" id="about">
             <p>@爱玩批处理的cmd · 个人站</p>
             <p>Copyright © 2021-2026 | https://my-download11.github.io/my-download-site/</p>
+            <div style="text-align: center; margin-top: 20px; color: #1d1d1f; font-size: 1.2em; font-weight: 500;">
+    <span id="visit-count">加载中...</span>
+</div>
+
+<script>
+    (function() {
+        let count = localStorage.getItem('visitCount');
+        
+        if (count) {
+            count = parseInt(count) + 1;
+        } else {
+            count = 1;
+        }
+        
+        localStorage.setItem('visitCount', count);
+        
+        document.getElementById('visit-count').textContent = `你是第 ${count} 位访客`;
+    })();
+</script>
             <div class="footer-links">
                 <a href="https://space.bilibili.com/3546962242570935" target="_blank">作者B站主页</a>
                 <a href="#">回到顶部 ↑</a>
@@ -301,6 +321,7 @@
     </script>
 </body>
 </html> @爱玩批处理的cmd 原创网站
+
 
 
 
