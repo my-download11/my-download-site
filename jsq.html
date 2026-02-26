@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .calculator {
+            width: 320px;
+            background-color: #2c2c2c;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 2px solid #444;
+            position: relative;
+        }
+        
+        .calculator::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #ff9500, #ff5e3a, #ff2a68, #ff9500);
+            border-radius: 18px;
+            z-index: -1;
+            opacity: 0.7;
+            animation: borderGlow 4s linear infinite;
+        }
+        
+        @keyframes borderGlow {
+            0% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.5; }
+        }
+        
+        .display {
+            padding: 20px;
+            background-color: #1a1a1a;
+            text-align: right;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border-bottom: 2px solid #444;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .display::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+        
+        .previous-operand {
+            font-size: 18px;
+            color: #aaa;
+            min-height: 24px;
+            word-wrap: break-word;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .current-operand {
+            font-size: 36px;
+            color: #fff;
+            font-weight: normal;
+            word-wrap: break-word;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            background-color: #444;
+            border-top: 1px solid #555;
+            border-left: 1px solid #555;
+        }
+        
+        button {
+            border: none;
+            padding: 20px 0;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #666;
+            color: #fff;
+            transition: all 0.2s;
+            border-right: 1px solid #555;
+            border-bottom: 1px solid #555;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        button:focus::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+        
+        button:hover {
+            background-color: #777;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:active {
+            background-color: #888;
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        
+        .operator {
+            background-color: #ff9500;
+            border-right: 1px solid #ffaa33;
+            border-bottom: 1px solid #ffaa33;
+        }
+        
+        .operator:hover {
+            background-color: #ffaa33;
+        }
+        
+        .equals {
+            background-color: #ff9500;
+            color: white;
+            border-right: 1px solid #ffaa33;
+            border-bottom: 1px solid #ffaa33;
+        }
+        
+        .equals:hover {
+            background-color: #ffaa33;
+        }
+        
+        .clear {
+            background-color: #555;
+        }
+        
+        .clear:hover {
+            background-color: #666;
+        }
+        
+        .number {
+            background-color: #777;
+        }
+        
+        .number:hover {
+            background-color: #888;
+        }
+        
+        .zero {
+            grid-column: span 2;
+        }
+        
+        .buttons button:nth-child(4n) {
+            border-right: 1px solid #555;
+        }
+        
+        .buttons button:nth-last-child(-n+4) {
+            border-bottom: 1px solid #555;
+        }
+        
+        .buttons button:last-child {
+            border-right: 1px solid #555;
+            border-bottom: 1px solid #555;
+        }
+        
+        .calculator-header {
+            background: linear-gradient(to right, #3a3a3a, #2c2c2c);
+            padding: 10px 20px;
+            color: #aaa;
+            font-size: 14px;
+            border-bottom: 1px solid #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .calculator-title {
+            font-weight: bold;
+            color: #ff9500;
+            font-size: 18px;
+        }
+        
+        .calculator-status {
+            font-size: 12px;
+        }
+        
+        .calculator-footer {
+            padding: 8px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #444;
+            background-color: #2c2c2c;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="calculator-header">
+            <div class="calculator-title">计算器</div>
+            <div class="calculator-status"> </div>
+        </div>
+        
+        <div class="display">
+            <div class="previous-operand" id="previousOperand"></div>
+            <div class="current-operand" id="currentOperand">0</div>
+        </div>
+        
+        <div class="buttons">
+            <button class="clear" data-action="clear">C</button>
+            <button class="operator" data-action="percentage">%</button>
+            <button class="operator" data-action="divide">÷</button>
+            <button class="operator" data-action="multiply">×</button>
+            
+            <button class="number" data-number="7">7</button>
+            <button class="number" data-number="8">8</button>
+            <button class="number" data-number="9">9</button>
+            <button class="operator" data-action="subtract">-</button>
+            
+            <button class="number" data-number="4">4</button>
+            <button class="number" data-number="5">5</button>
+            <button class="number" data-number="6">6</button>
+            <button class="operator" data-action="add">+</button>
+            
+            <button class="number" data-number="1">1</button>
+            <button class="number" data-number="2">2</button>
+            <button class="number" data-number="3">3</button>
+            <button class="operator" data-action="equals" style="grid-row: span 2;">=</button>
+            
+            <button class="number zero" data-number="0">0</button>
+            <button class="number" data-number=".">.</button>
+        </div>
+        
+        <div class="calculator-footer">
+            © Cubic³ Corporation。保留所有权利。
+        </div>
+    </div>
+
+    <script>
+        const previousOperandElement = document.getElementById('previousOperand');
+        const currentOperandElement = document.getElementById('currentOperand');
+        
+        let currentOperand = '0';
+        let previousOperand = '';
+        let operation = undefined;
+        let resetCurrentOperand = false;
+        
+        function updateDisplay() {
+            currentOperandElement.textContent = currentOperand;
+            
+            if (operation != null) {
+                let symbol = '';
+                switch(operation) {
+                    case 'add': symbol = '+'; break;
+                    case 'subtract': symbol = '-'; break;
+                    case 'multiply': symbol = '×'; break;
+                    case 'divide': symbol = '÷'; break;
+                    case 'percentage': symbol = '%'; break;
+                }
+                previousOperandElement.textContent = `${previousOperand} ${symbol}`;
+            } else {
+                previousOperandElement.textContent = previousOperand;
+            }
+        }
+        
+        function appendNumber(number) {
+            if (currentOperand === '0' || resetCurrentOperand) {
+                currentOperand = number;
+                resetCurrentOperand = false;
+            } else {
+                if (number === '.' && currentOperand.includes('.')) return;
+                currentOperand += number;
+            }
+        }
+        
+        function chooseOperation(op) {
+            if (currentOperand === '') return;
+            
+            if (previousOperand !== '') {
+                compute();
+            }
+            
+            operation = op;
+            previousOperand = currentOperand;
+            resetCurrentOperand = true;
+        }
+        
+        function compute() {
+            let computation;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
+            
+            if (isNaN(prev) || isNaN(current)) return;
+            
+            switch(operation) {
+                case 'add':
+                    computation = prev + current;
+                    break;
+                case 'subtract':
+                    computation = prev - current;
+                    break;
+                case 'multiply':
+                    computation = prev * current;
+                    break;
+                case 'divide':
+                    if (current === 0) {
+                        alert('不能除以0');
+                        clear();
+                        return;
+                    }
+                    computation = prev / current;
+                    break;
+                case 'percentage':
+                    computation = prev * (current / 100);
+                    break;
+                default:
+                    return;
+            }
+            
+            currentOperand = Math.round(computation * 100000000) / 100000000;
+            operation = undefined;
+            previousOperand = '';
+            resetCurrentOperand = true;
+        }
+        
+        function percentage() {
+            if (currentOperand === '') return;
+            const current = parseFloat(currentOperand);
+            currentOperand = (current / 100).toString();
+        }
+        
+        function clear() {
+            currentOperand = '0';
+            previousOperand = '';
+            operation = undefined;
+        }
+        
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.hasAttribute('data-number')) {
+                    appendNumber(button.getAttribute('data-number'));
+                    updateDisplay();
+                    return;
+                }
+                
+                if (button.hasAttribute('data-action')) {
+                    const action = button.getAttribute('data-action');
+                    
+                    switch(action) {
+                        case 'clear':
+                            clear();
+                            break;
+                        case 'equals':
+                            if (previousOperand === '' || operation === undefined) return;
+                            compute();
+                            break;
+                        case 'percentage':
+                            if (previousOperand === '') {
+                                percentage();
+                            } else {
+                                chooseOperation(action);
+                            }
+                            break;
+                        default:
+                            chooseOperation(action);
+                            break;
+                    }
+                    
+                    updateDisplay();
+                }
+            });
+        });
+        
+        document.addEventListener('keydown', event => {
+            if (event.key >= '0' && event.key <= '9') {
+                appendNumber(event.key);
+                updateDisplay();
+            } else if (event.key === '.') {
+                appendNumber('.');
+                updateDisplay();
+            } else if (event.key === '+' || event.key === '-') {
+                chooseOperation(event.key === '+' ? 'add' : 'subtract');
+                updateDisplay();
+            } else if (event.key === '*' || event.key === 'x') {
+                chooseOperation('multiply');
+                updateDisplay();
+            } else if (event.key === '/') {
+                chooseOperation('divide');
+                updateDisplay();
+            } else if (event.key === 'Enter' || event.key === '=') {
+                event.preventDefault();
+                if (previousOperand !== '' && operation !== undefined) {
+                    compute();
+                    updateDisplay();
+                }
+            } else if (event.key === 'Escape') {
+                clear();
+                updateDisplay();
+            } else if (event.key === '%') {
+                percentage();
+                updateDisplay();
+            }
+        });
+        
+        updateDisplay();
+    </script>
+</body>
+</html>
