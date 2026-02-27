@@ -3,188 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@爱玩批处理的cmd · 个人站</title>
+    <title>@爱玩批处理的cmd · 小站</title>
     <link rel="icon" type="image/x-icon" href="123.ico">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
         }
 
         body {
-            background: #f5f5f7;
+            background: #f0f2f5 url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h60v60H0z" fill="%23f0f2f5"/><path d="M30 30 L30 0 M30 30 L60 30 M30 30 L30 60 M30 30 L0 30" stroke="%23d0d4d9" stroke-width="1" opacity="0.3"/></svg>');
             color: #1d1d1f;
             line-height: 1.5;
+            padding: 0 15px;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
+            max-width: 1300px;
+            margin: 20px auto;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 60px;
+            background: white;
+            border-radius: 22px;
+            padding: 50px 47px;
+            margin: 20px 0 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 5px solid #2c3e50;
         }
 
         .header h1 {
-            font-size: 3.5em;
+            font-size: 2.8em;
             font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #2c3e50, #1e2b37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #2c3e50;
+            margin-bottom: 8px;
         }
 
         .header p {
-            font-size: 1.2em;
-            color: #86868b;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 1.3em;
+            color: #5a6a7a;
         }
 
         .nav {
+            background: white;
+            border-radius: 23px;
+            padding: 10px 25px;
+            margin: 25px 0 35px;
             display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 60px;
-            padding: 20px 0;
-            border-bottom: 1px solid #d2d2d7;
+            flex-wrap: wrap;
+            gap: 20px 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .nav a {
-            color: #1d1d1f;
+            color: #2c3e50;
             text-decoration: none;
             font-size: 1.1em;
             font-weight: 500;
             padding: 5px 0;
-            transition: color 0.3s ease;
         }
 
         .nav a:hover {
-            color: #2c3e50;
+            color: #1e2b37;
+            border-bottom: 2px solid #2c3e50;
         }
 
-        .grid {
+        .feature-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px 35px;
+            margin: 40px 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        .feature-text {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .feature-text h2 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .feature-text p {
+            font-size: 1.1em;
+            color: #5a6a7a;
+            margin-bottom: 20px;
+        }
+
+        .feature-btn {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .feature-btn:hover {
+            background: #1e2b37;
+        }
+
+        .feature-img {
+            width: 180px;
+            height: 180px;
+            background: #eef2f6;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            color: #2c3e50;
+            border: 2px solid #d0d8e0;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 45px 0 25px;
+            padding-left: 15px;
+            border-left: 6px solid #2c3e50;
+        }
+
+        .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 25px;
+            margin: 30px 0 40px;
+        }
+
+        @media (max-width: 900px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .card-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
 
         .card {
             background: white;
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0,0,0,0.03);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            border: 1px solid #eaeef2;
+            display: flex;
+            gap: 20px;
+            transition: 0.2s;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        .card-icon {
-            font-size: 2.5em;
-            margin-bottom: 20px;
+        .card-icon-img {
+            width: 60px;
+            height: 60px;
+            background: #eef2f6;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            color: #2c3e50;
+            flex-shrink: 0;
         }
 
-        .card h3 {
-            font-size: 1.5em;
+        .card-content {
+            flex: 1;
+        }
+
+        .card-content h3 {
+            font-size: 1.4em;
             font-weight: 600;
-            margin-bottom: 10px;
-            color: #1d1d1f;
+            color: #2c3e50;
+            margin-bottom: 8px;
         }
 
-        .card p {
-            color: #86868b;
-            margin-bottom: 20px;
+        .card-content p {
+            color: #5a6a7a;
+            margin-bottom: 15px;
             font-size: 0.95em;
         }
 
         .card-link {
-            display: inline-block;
             color: #2c3e50;
             text-decoration: none;
             font-weight: 500;
-            font-size: 1em;
-            transition: color 0.3s ease;
+            display: inline-block;
+            background: #eef2f6;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.95em;
         }
 
         .card-link:hover {
-            color: #1e2b37;
-            text-decoration: underline;
+            background: #d0d8e0;
         }
 
-        .card-link::after {
-            content: ' →';
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card-link:hover::after {
-            opacity: 1;
-        }
-
-        .feature-card {
-            background: #2c3e50;
-            color: white;
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .feature-content h2 {
-            font-size: 2em;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .feature-content p {
-            font-size: 1.1em;
-            opacity: 0.9;
-            max-width: 500px;
-        }
-
-        .feature-btn {
+        .download-card {
             background: white;
-            color: #2c3e50;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            border: 1px solid #eaeef2;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 400px;
         }
 
-        .feature-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        .download-card .title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .download-card .meta {
+            color: #5a6a7a;
+            font-size: 0.9em;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .download-link {
+            background: #eef2f6;
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            width: fit-content;
+            font-weight: 500;
         }
 
         .footer {
+            background: white;
+            border-radius: 20px 20px 20px 20px;
+            padding: 15px 30px 10px;
+            margin-top: 60px;
             text-align: center;
-            padding: 40px 0;
-            color: #86868b;
-            border-top: 1px solid #d2d2d7;
+            color: #5a6a7a;
+            border-top: 1px solid #dae0e6;
+        }
+
+        .footer p {
+            margin: 8px 0;
         }
 
         .footer a {
-            color: #1d1d1f;
+            color: #2c3e50;
             text-decoration: none;
         }
 
@@ -196,165 +278,167 @@
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-top: 20px;
+            margin: 25px 0 15px;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.5em;
-            }
-            
-            .nav {
-                gap: 20px;
-                flex-wrap: wrap;
-            }
-            
-            .feature-card {
-                flex-direction: column;
-                text-align: center;
-            }
+        .footer-links a {
+            background: #eef2f6;
+            padding: 6px 20px;
+            border-radius: 30px;
+        }
+
+        @media (max-width: 700px) {
+            .header h1 { font-size: 2.2em; }
+            .feature-section { flex-direction: column; text-align: center; }
+            .feature-img { width: 140px; height: 140px; }
+            .card { flex-direction: column; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>@爱玩批处理的cmd</h1>
-            <p>一个简单的个人网站，分享自己的小玩意</p>
+            <h1>@爱玩批处理的cmd 的小站</h1>
+            <p>自己玩的小工具和小游戏</p>
         </div>
 
         <div class="nav">
             <a href="#">首页</a>
             <a href="#games">游戏</a>
-            <a href="#games">工具</a>
+            <a href="#tools">工具</a>
             <a href="#downloads">下载</a>
             <a href="#about">关于</a>
         </div>
-        
 
-        <div class="feature-card">
-            <div class="feature-content">
+        <div class="feature-section">
+            <div class="feature-text">
                 <h2>B站主页</h2>
-                <p>来看看我的视频，一起折腾好玩的东西</p>
+                <p>偶尔发点视频，记录折腾的过程</p>
+                <button class="feature-btn" onclick="window.open('https://space.bilibili.com/3546962242570935', '_blank')">去B站看看</button>
             </div>
-            <button onclick="window.open('https://space.bilibili.com/3546962242570935', '_blank')" class="feature-btn">
-                前往B站 →
-            </button>
+            <div class="feature-img">📹</div>
         </div>
 
-        <h2 style="font-size: 2em; margin-bottom: 30px; color: #1d1d1f;" id="games">🎮 我的工具，小游戏</h2>
-        <div class="grid">
+        <div class="section-title" id="tools">🎲 小工具，游戏</div>
+        <div class="section-title" id="games"></div>
+        <div class="card-grid">
             <div class="card">
-                <div class="card-icon">🧮</div>
-                <h3>作者自制计算器</h3>
-                <p>一个简单的计算器，支持加减乘除</p>
-                <a href="jsq.html" class="card-link">打开计算器</a>
+                <div class="card-icon-img">🧮</div>
+                <div class="card-content">
+                    <h3>计算器</h3>
+                    <p>加减乘除，简单能用</p>
+                    <a href="jsq.html" class="card-link">打开</a>
+                </div>
             </div>
 
             <div class="card">
-                <div class="card-icon">💣</div>
-                <h3>雷区蹦哒 - 自制扫雷</h3>
-                <p>Windows 经典扫雷游戏，左键点开，右键插旗</p>
-                <a href="saolei.html" class="card-link">开始扫雷</a>
+                <div class="card-icon-img">💣</div>
+                <div class="card-content">
+                    <h3>雷区蹦哒</h3>
+                    <p>Windows经典扫雷，左键点开，右键插旗</p>
+                    <a href="saolei.html" class="card-link">开始</a>
+                </div>
             </div>
 
             <div class="card">
-                <div class="card-icon">⌚</div>
-                <h3>全屏时钟</h3>
-                <p>全屏时钟，按F11全屏</p>
-                <a href="shizhong.html" class="card-link">打开时钟</a>
-            </div>
-        </div>
-                <div class="grid">
-            <div class="card">
-                <div class="card-icon">📑</div>
-                <h3>在线Word编辑器</h3>
-                <p>浏览器里的Word，支持保存打印</p>
-                <a href="word.html" class="card-link">进入Word编辑器</a>
-            </div>
-
-            <div class="card">
-                <div class="card-icon">🕹️</div>
-                <h3>更多工具，游戏开发中</h3>
-                <p>更多游戏和实用工具即将上线</p>
-                <span class="card-link" style="color: #86868b;">敬请期待</span>
-            </div>
-
-            <div class="card">
-                <div class="card-icon">🕹️</div>
-                <h3>更多工具，游戏开发中</h3>
-                <p>更多游戏和实用工具即将上线</p>
-                <span class="card-link" style="color: #86868b;">敬请期待</span>
+                <div class="card-icon-img">⏰</div>
+                <div class="card-content">
+                    <h3>全屏时钟</h3>
+                    <p>大数字，按F11全屏</p>
+                    <a href="shizhong.html" class="card-link">打开</a>
+                </div>
             </div>
         </div>
 
-        <h2 style="font-size: 2em; margin-bottom: 30px; color: #1d1d1f;" id="downloads">📦 文件下载</h2>
-        <div class="grid">
+        <div class="card-grid">
             <div class="card">
-                <div class="card-icon">⚙️</div>
-                <h3>Windows 激活工具.bat</h3>
-                <p>大小: 2 KB | 激活Windows的小工具</p>
-                <a href="Windows 激活工具.bat" download class="card-link">立即下载</a>
+                <div class="card-icon-img">📄</div>
+                <div class="card-content">
+                    <h3>在线Word</h3>
+                    <p>浏览器里写文档</p>
+                    <a href="word.html" class="card-link">进入</a>
+                </div>
             </div>
 
             <div class="card">
-                <div class="card-icon">💿</div>
-                <h3>Ding PE.iso</h3>
-                <p>大小: 715 MB | 自制 Windows PE 系统镜像</p>
-                <a href="https://www.123865.com/s/j4gCvd-WvTz" target="_blank" class="card-link">前往123云盘下载</a>
+                <div class="card-icon-img">🕹️</div>
+                <div class="card-content">
+                    <h3>更多工具</h3>
+                    <p>还在想</p>
+                    <span class="card-link" style="background: #f0f2f5; color: #aaa;">敬请期待</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-img">🕹️</div>
+                <div class="card-content">
+                    <h3>更多工具</h3>
+                    <p>还没想好</p>
+                    <span class="card-link" style="background: #f0f2f5; color: #aaa;">敬请期待</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title" id="downloads">📦 文件下载</div>
+        <div class="card-grid">
+            <div class="download-card">
+                <div class="title">⚙️ Windows 激活工具.bat</div>
+                <div class="meta">大小: 2 KB · 批处理</div>
+                <a href="Windows 激活工具.bat" download class="download-link">下载</a>
+            </div>
+
+            <div class="download-card">
+                <div class="title">💿 Lite PE 标准版（提取码：PE12）</div>
+                <div class="meta">大小: 716 MB · Windows PE，集成基础维护工具、声卡网卡驱动和office、edge、UltraISO订购版、酷狗、PotPlayer、QQ等</div>
+                <a href="https://www.123865.com/s/j4gCvd-C9Tz?pwd=pe12#" target="_blank" class="download-link">前往123云盘下载</a>
+            </div>
+
+            <div class="download-card">
+                <div class="title">💿 Lite PE 工作站版（提取码：PEW1）</div>
+                <div class="meta">大小: 4.2 GB · 标准版去除了系统维护工具，添加123云盘、B站、WPS PC端完整版，适合用不惯Windows 11 的朋友</div>
+                <a href="https://www.123865.com/s/j4gCvd-c9Tz?pwd=pew1#" target="_blank" class="download-link">前往123云盘下载</a>
+            </div>
+
+            <div class="download-card">
+                <div class="title">⚙️ CMD 浏览器.bat</div>
+                <div class="meta">大小: 3 KB · 批处理，集齐了常用网站，支持搜索，更改样式，更改搜索引擎</div>
+                <a href="CMD 浏览器.bat" download class="download-link">下载</a>
+            </div>
+
+            <div class="download-card">
+                <div class="title">⚙️ 假cmd.bat</div>
+                <div class="meta">大小: 1 KB · 批处理，界面跟cmd完全相同，能判断管理员权限，输入任何命令都报错</div>
+                <a href="假cmd.bat" download class="download-link">下载</a>
             </div>
         </div>
 
         <div class="footer" id="about">
-            <p>@爱玩批处理的cmd 个人网站</p>
-            <p>版权所有 © 爱玩批处理的cmd，未经许可 禁止转载，请尊重他人的劳动成果！</p>
+            <p>@爱玩批处理的cmd 个人小站</p>
+            <p>版权所有 © 爱玩批处理的cmd，别抄走</p>
             <p>网址：https://my-download11.github.io/my-download-site/</p>
-            <div style="text-align: center; margin-top: 20px; color: #1d1d1f; font-size: 1.2em; font-weight: 500;">
-    <span id="visit-count">加载中...</span>
-</div>
-
-<script>
-    (function() {
-        let count = localStorage.getItem('visitCount');
-        
-        if (count) {
-            count = parseInt(count) + 1;
-        } else {
-            count = 1;
-        }
-        
-        localStorage.setItem('visitCount', count);
-        
-        document.getElementById('visit-count').textContent = `你访问了 ${count} 次这个网站`;
-    })();
-</script>
+            <div style="margin: 20px 0;">
+                <span id="visit-count" style="font-size: 1.2em; font-weight: 500;">加载中...</span>
+            </div>
             <div class="footer-links">
-                <a href="https://space.bilibili.com/3546962242570935" target="_blank">作者B站主页</a>
-                <a href="#">回到顶部 ↑</a>
+                <a href="https://space.bilibili.com/3546962242570935" target="_blank">B站主页</a>
+                <a href="#">回到顶部</a>
             </div>
         </div>
     </div>
 
     <script>
+        (function() {
+            let count = localStorage.getItem('visitCount');
+            count = count ? parseInt(count) + 1 : 1;
+            localStorage.setItem('visitCount', count);
+            document.getElementById('visit-count').textContent = `你来过 ${count} 次`;
+        })();
+
         document.querySelectorAll('a[download]').forEach(btn => {
             btn.addEventListener('click', function() {
-                console.log(`文件开始下载: ${this.getAttribute('href')}`);
+                console.log(`下载: ${this.getAttribute('href')}`);
             });
         });
     </script>
 </body>
-</html> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</html>
