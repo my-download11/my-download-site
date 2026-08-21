@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人机验证</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #edf4ff 0%, #e7eefc 25%, #dde6f5 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #1f2937;
+        }
+        .captcha-card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 16px;
+            box-shadow: 0 18px 45px rgba(31, 41, 55, 0.12), 0 4px 14px rgba(29, 78, 216, 0.08);
+            width: 420px;
+            overflow: hidden;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            backdrop-filter: blur(6px);
+        }
+        .header {
+            padding: 16px 20px 12px 20px;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(180deg, rgba(248, 250, 255, 0.9), rgba(255, 255, 255, 0.96));
+        }
+        .header-icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #4f8cf8, #2f66ef);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 6px 14px rgba(47, 102, 239, 0.25);
+        }
+        .header-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+        .header-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            letter-spacing: 0.04em;
+        }
+        .header-badge {
+            margin-left: auto;
+            font-size: 11px;
+            color: #2456d6;
+            background: #eef4ff;
+            border: 1px solid #dfeaff;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        .body {
+            padding: 22px 24px 16px 24px;
+        }
+        .instruction {
+            font-size: 13px;
+            color: #475467;
+            text-align: center;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+        .instruction .highlight {
+            color: #1d4ed8;
+            font-weight: 700;
+        }
+        .timer-area {
+            width: 100%;
+            height: 192px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #dfe6f2;
+            background: linear-gradient(180deg, #f8fafc, #eef4ff);
+            color: #475467;
+            position: relative;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+        .timer-area::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border-radius: 10px;
+            border: 1px dashed rgba(148, 163, 184, 0.45);
+            pointer-events: none;
+        }
+        .timer-area.waiting {
+            background: linear-gradient(180deg, #f8fafc, #eef4ff);
+            border-color: #d9e3f8;
+            color: #475467;
+        }
+        .timer-area.running {
+            background: linear-gradient(180deg, #fff4f2, #ffe8e0);
+            border-color: #f6c5b7;
+            color: #b42318;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 0 3px rgba(239, 68, 68, 0.05);
+        }
+        .timer-area.done {
+            background: linear-gradient(180deg, #f0fdf5, #e8fff0);
+            border-color: #bfe5cc;
+            color: #166534;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 0 3px rgba(34, 197, 94, 0.04);
+        }
+        .timer-area .main-text {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            position: relative;
+            z-index: 1;
+        }
+        .timer-area .sub-text {
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .timer-area .countdown-text {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+            display: none;   /* 隐藏倒计时数字 */
+        }
+        .input-area {
+            margin-top: 18px;
+            display: none;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .input-area.show {
+            display: flex;
+        }
+        .input-area label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475467;
+        }
+        .input-area input {
+            width: 116px;
+            padding: 10px 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            background: #fff;
+            box-shadow: inset 0 1px 2px rgba(16, 24, 40, 0.05);
+        }
+        .input-area input:focus {
+            border-color: #4f8cf8;
+            box-shadow: 0 0 0 4px rgba(79, 140, 248, 0.1);
+        }
+        .input-area input.error {
+            border-color: #f87171;
+            background: #fff1f2;
+        }
+        .input-area input.success {
+            border-color: #4ade80;
+            background: #f0fdf4;
+        }
+        .input-area input:disabled {
+            background: #f1f3f4;
+            cursor: not-allowed;
+        }
+        .input-area .unit {
+            font-size: 14px;
+            color: #475467;
+            font-weight: 600;
+        }
+
+        /* ===== 结果区域：无背景框，纯文字 ===== */
+        .result-area {
+            margin-top: 14px;
+            display: none;
+            text-align: center;
+        }
+        .result-area.show {
+            display: block;
+        }
+        .result-area .verdict {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+        .result-area .verdict.robot {
+            color: #dc2626;
+        }
+        .result-area .verdict.human {
+            color: #15803d;
+        }
+        .result-area .verdict.cheat {
+            color: #b45309;
+        }
+        .result-area .auto-hint {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #667085;
+            display: none;   /* 隐藏自动跳转/重试提示 */
+        }
+
+        .footer {
+            padding: 12px 20px 18px 20px;
+            border-top: 1px solid #edf2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(248, 250, 255, 0.8);
+        }
+        .footer-left {
+            font-size: 12px;
+            color: #667085;
+            letter-spacing: 0.02em;
+        }
+        .btn-verify {
+            background: linear-gradient(180deg, #4f8cf8, #2f66ef);
+            color: white;
+            border: none;
+            padding: 9px 24px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+            box-shadow: 0 8px 18px rgba(47, 102, 239, 0.25);
+        }
+        .btn-verify:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.02);
+        }
+        .btn-verify:disabled {
+            background: #d0d5dd;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .refresh-link {
+            color: #2456d6;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .refresh-link:hover {
+            text-decoration: underline;
+        }
+        .result-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(2px);
+            border-radius: 12px;
+            z-index: 10;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #0f172a;
+        }
+        .result-overlay.show {
+            display: flex;
+        }
+        .result-overlay .icon {
+            font-size: 48px;
+            margin-bottom: 8px;
+            color: #16a34a;
+        }
+        .result-overlay .msg {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .result-overlay .sub-msg {
+            font-size: 13px;
+            color: #475467;
+            margin-top: 5px;
+        }
+        .timer-wrapper {
+            position: relative;
+        }
+        .attempt-counter {
+            font-size: 12px;
+            color: #667085;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .status-hint {
+            font-size: 12px;
+            color: #667085;
+            margin-top: 8px;
+            text-align: center;
+            min-height: 18px;
+            line-height: 1.5;
+        }
+        .footer-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="captcha-card">
+    <div class="header">
+        <div class="header-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        </div>
+        <span class="header-title">安全验证</span>
+        <span class="header-badge">Create By 爱玩批处理的cmd</span>
+    </div>
+
+    <div class="body">
+        <div class="instruction">
+            请点击下方区域开始，<span class="highlight">默数秒数</span><br>
+            计时结束后，输入你的估算值并提交进行身份校验
+        </div>
+
+        <div class="timer-wrapper">
+            <div class="timer-area waiting" id="timerArea">
+                <span class="main-text" id="mainText">点击开始</span>
+                <span class="sub-text" id="subText">系统将随机持续 1~3 秒</span>
+                <span class="countdown-text" id="countdownText"></span>
+            </div>
+            <div class="result-overlay" id="resultOverlay">
+                <div class="icon" id="resultIcon">✓</div>
+                <div class="msg" id="resultMsg">验证通过</div>
+                <div class="sub-msg" id="resultSub">正在继续访问...</div>
+            </div>
+        </div>
+
+        <div class="input-area" id="inputArea">
+            <label for="userInput">我估计</label>
+            <input type="number" id="userInput" step="0.01" min="0" max="10" placeholder="0.00">
+            <span class="unit">秒</span>
+        </div>
+
+        <!-- 结果区域：无背景框，直接显示文字 -->
+        <div class="result-area" id="resultArea">
+            <div class="verdict" id="verdict"></div>
+            <div class="auto-hint" id="autoHint"></div>
+        </div>
+
+        <div class="status-hint" id="statusHint"></div>
+        <div class="attempt-counter" id="attemptCounter">尝试次数：0</div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-left">为保障安全，请完成验证</div>
+        <div class="footer-actions">
+            <span class="refresh-link" onclick="initGame()">重新开始</span>
+            <button class="btn-verify" id="verifyBtn" disabled>验证</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============ DOM 引用 ============
+    const timerArea = document.getElementById('timerArea');
+    const mainText = document.getElementById('mainText');
+    const subText = document.getElementById('subText');
+    const countdownText = document.getElementById('countdownText');
+    const inputArea = document.getElementById('inputArea');
+    const userInput = document.getElementById('userInput');
+    const resultArea = document.getElementById('resultArea');
+    const verdictEl = document.getElementById('verdict');
+    const autoHint = document.getElementById('autoHint');
+    const statusHint = document.getElementById('statusHint');
+    const attemptCounter = document.getElementById('attemptCounter');
+    const resultOverlay = document.getElementById('resultOverlay');
+    const resultIcon = document.getElementById('resultIcon');
+    const resultMsg = document.getElementById('resultMsg');
+    const resultSub = document.getElementById('resultSub');
+    const verifyBtn = document.getElementById('verifyBtn');
+
+    // ============ 状态 ============
+    let state = 'idle';           // idle | running | done | result
+    let actualDuration = 0;
+    let attempts = 0;
+    let timeoutId = null;
+    let countdownInterval = null;
+    let gameCompleted = false;
+    let lastVerdict = '';         // 'human' | 'robot' | 'cheat'
+
+    // ============ 工具 ============
+    function getRandomDuration() {
+        const range = Math.random() < 0.5 ? 1 : 2;
+        const base = range + 0.06;
+        const extra = Math.random() * 0.88;
+        return base + extra;
+    }
+
+    // ============ 重置（完全恢复） ============
+    function initGame() {
+        clearTimeout(timeoutId);
+        clearInterval(countdownInterval);
+        state = 'idle';
+        gameCompleted = false;
+        lastVerdict = '';
+        inputArea.classList.remove('show');
+        resultArea.classList.remove('show');
+        resultOverlay.classList.remove('show');
+        verifyBtn.disabled = true;
+        verifyBtn.textContent = '验证';
+        statusHint.textContent = '';
+        autoHint.textContent = '';
+        countdownText.textContent = '';
+        timerArea.className = 'timer-area waiting';
+        mainText.textContent = '点击开始';
+        subText.textContent = '系统将随机持续 1~3 秒';
+        // 重置输入框
+        userInput.value = '';
+        userInput.className = '';
+        userInput.disabled = false;      // ★ 关键：解除禁用
+        timerArea.onclick = onTimerClick;
+        verifyBtn.onclick = handleVerify;
+    }
+
+    // ============ 计时开始 ============
+    function startTimer() {
+        if (state === 'running') return;
+        state = 'running';
+        timerArea.className = 'timer-area running';
+        mainText.textContent = '正在计时';
+        subText.textContent = '请默数秒数，等待系统提示结束';
+        countdownText.textContent = '';
+
+        const duration = getRandomDuration();
+        actualDuration = duration;
+
+        timeoutId = setTimeout(() => {
+            stopTimer();
+        }, duration * 1000);
+    }
+
+    // ============ 计时结束 ============
+    function stopTimer() {
+        state = 'done';
+        timerArea.className = 'timer-area done';
+        mainText.textContent = '计时结束';
+        subText.textContent = '请输入你估算的秒数';
+
+        inputArea.classList.add('show');
+        userInput.focus();
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = '验证';
+        verifyBtn.onclick = handleVerify;
+        statusHint.textContent = '请填写你所感知的秒数（保留两位小数，例如 1.23）';
+    }
+
+    // ============ 验证处理 ============
+    function handleVerify() {
+        if (gameCompleted) return;
+        if (state !== 'done') return;
+
+        const rawValue = userInput.value.trim();
+        if (rawValue === '') {
+            statusHint.textContent = '请输入你估算的秒数';
+            userInput.className = 'error';
+            return;
+        }
+
+        const userSeconds = parseFloat(rawValue);
+        if (isNaN(userSeconds) || userSeconds < 0 || userSeconds > 10) {
+            statusHint.textContent = '请输入 0~10 之间的有效数字';
+            userInput.className = 'error';
+            return;
+        }
+
+        // 计算偏差（仅用于判定，不显示具体数值）
+        const userTime = Math.round(userSeconds * 100) / 100;
+        const actual = Math.round(actualDuration * 100) / 100;
+        const deviation = Math.abs(userTime - actual);
+        const devRounded = Math.round(deviation * 100) / 100;
+
+        attempts++;
+        attemptCounter.textContent = `尝试次数：${attempts}`;
+
+        // 显示结果区域（只显示判定文字，无背景框）
+        resultArea.classList.add('show');
+
+        let verdictText = '';
+        let verdictClass = '';
+
+        if (devRounded < 0.03) {
+            verdictText = '判定：非人类行为（误差过小，无法通过验证）';
+            verdictClass = 'robot';
+            lastVerdict = 'robot';
+            userInput.className = 'error';
+            timerArea.className = 'timer-area running';
+            mainText.textContent = '验证失败';
+            subText.textContent = '3 秒后自动重试';
+            verifyBtn.disabled = true;
+        } else if (devRounded >= 0.03 && devRounded <= 0.99) {
+            verdictText = '已通过验证';
+            verdictClass = 'human';
+            lastVerdict = 'human';
+            userInput.className = 'success';
+            timerArea.className = 'timer-area done';
+            mainText.textContent = '验证通过';
+            subText.textContent = '3 秒后自动继续';
+            verifyBtn.disabled = true;
+        } else {
+            verdictText = '偏差过大，请重新尝试';
+            verdictClass = 'cheat';
+            lastVerdict = 'cheat';
+            userInput.className = '';
+            timerArea.className = 'timer-area waiting';
+            mainText.textContent = '请重试';
+            subText.textContent = '3 秒后自动重新开始';
+            verifyBtn.disabled = true;
+        }
+
+        verdictEl.className = 'verdict ' + verdictClass;
+        verdictEl.textContent = verdictText;
+        state = 'result';
+
+        // 禁用输入框和按钮
+        userInput.disabled = true;
+        verifyBtn.disabled = true;
+
+        // 内部倒计时（不显示数字，只执行动作）
+        let countdown = 3;
+        clearInterval(countdownInterval);
+        countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                if (lastVerdict === 'human') {
+                    doJump();
+                } else {
+                    initGame();
+                    setTimeout(() => startTimer(), 400);
+                }
+            }
+        }, 1000);
+    }
+
+    // ============ 跳转 ============
+    function doJump() {
+        if (gameCompleted) return;
+        gameCompleted = true;
+        resultOverlay.classList.add('show');
+        resultIcon.textContent = '✓';
+        resultMsg.textContent = '验证通过';
+        resultSub.textContent = '正在继续访问...';
+
+        setTimeout(() => {
+            window.location.href = 'https://14-y2014.github.io/my-download-site/start.html';
+        }, 800);
+    }
+
+    // ============ 点击区域 ============
+    function onTimerClick() {
+        if (state === 'idle') {
+            startTimer();
+        } else if (state === 'done' && !gameCompleted) {
+            userInput.focus();
+        }
+        // 其他状态忽略点击
+    }
+
+    // ============ 事件绑定 ============
+    timerArea.onclick = onTimerClick;
+
+    userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (!verifyBtn.disabled) {
+                handleVerify();
+            }
+        }
+    });
+
+    userInput.addEventListener('input', () => {
+        userInput.className = '';
+        if (state === 'done' || state === 'result') {
+            statusHint.textContent = '请输入你所感知的秒数';
+        }
+    });
+
+    verifyBtn.onclick = handleVerify;
+
+    // ============ 启动 ============
+    window.onload = initGame;
+</script>
+
+</body>
+</html>
